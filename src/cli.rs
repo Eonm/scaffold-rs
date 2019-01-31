@@ -1,7 +1,7 @@
 use clap::{Arg, App, SubCommand};
 
 pub fn build_cli() -> App<'static, 'static> {
-    App::new("Path generator rs")
+    App::new("scaffold-rs")
         .version("1.0")
         .author("Eonm <eon.mathis@gmail.com>")
         .about("Create and files and directory recursively")
