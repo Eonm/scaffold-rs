@@ -1,0 +1,23 @@
+build = "build.rs"
+
+[package]
+name = "scaffold-rs"
+version = "1.0.0"
+authors = ["eonm <eon.mathis@gmail.com>"]
+
+[dependencies]
+chrono = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+clap = "*"
+
+[profile.release]
+opt-level = 3
+
+[build-dependencies]
+clap = "*"
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
+chrono = "*"
