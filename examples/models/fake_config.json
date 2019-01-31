@@ -1,0 +1,11 @@
+{
+	"name": "fake model",
+	"paths": [
+		"./path_[1-20]/file_[2-10000].txt",
+		"file_[2-10000].txt"
+	],
+	"licence": "MIT",
+	"author": "eonm",
+	"email": "",
+	"notes": ""
+}
