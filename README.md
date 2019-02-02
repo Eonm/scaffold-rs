@@ -91,6 +91,34 @@ Multiple ranges can be defined for one path
 # ./files_2/files_3.txt
 ```
 
+__Parent Directory :__
+
+References to a parent directory are written as follow : __[*]__
+
+```sh
+./chapter_1/[*]_section_[1-6].txt
+# will produce :
+# ./chapter_1/chapter_1_section_1.txt
+# ./chapter_1/chapter_1_section_2.txt
+# ./chapter_1/chapter_1_section_3.txt
+# ./chapter_1/chapter_1_section_4.txt
+# ./chapter_1/chapter_1_section_5.txt
+# ./chapter_1/chapter_1_section_6.txt
+```
+
+Multiple references to a parent directory can be defined
+
+```sh
+./chapter_[1-2]/[*]_sections/[*]_[1-3].txt
+# will produce :
+# ./chapter_1/chapter_1_sections/chapter_1_sections_1.txt
+# ./chapter_1/chapter_1_sections/chapter_1_sections_2.txt
+# ./chapter_1/chapter_1_sections/chapter_1_sections_3.txt
+# ./chapter_2/chapter_2_sections/chapter_2_sections_1.txt
+# ./chapter_2/chapter_2_sections/chapter_2_sections_2.txt
+# ./chapter_2/chapter_2_sections/chapter_2_sections_3.txt
+```
+
 ## Build
 
 On linux :
