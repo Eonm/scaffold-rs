@@ -14,6 +14,7 @@ extern crate chrono;
 use chrono::prelude::*;
 
 mod path_range;
+mod path_parent;
 
 static mut VERBOSITY: bool = false;
 
@@ -168,7 +169,7 @@ fn scaffold (model : Model) {
     //always crate dirs before files
     let generated_paths =  model.get_dirs().into_iter().flat_map(|path| {
         path_range::generate_paths(path.to_str().unwrap(),("[","]"))
-    }).collect::<Vec<String>>();
+    }).map(|path| path_parent::replace_with_parent_dir(path)).collect::<Vec<String>>();
 
     for dir in generated_paths {
         scaffold_dir(&Path::new(&dir))
@@ -176,7 +177,7 @@ fn scaffold (model : Model) {
 
     let generated_files =  model.get_files().into_iter().flat_map(|path| {
         path_range::generate_paths(path.to_str().unwrap(),("[","]"))
-    }).collect::<Vec<String>>();
+    }).map(|path| path_parent::replace_with_parent_dir(path)).collect::<Vec<String>>();
 
     for file in generated_files {
         create_file(&Path::new(&file))
@@ -186,11 +187,11 @@ fn scaffold (model : Model) {
 fn dry_run (model : Model) {
     let generated_paths =  model.get_dirs().into_iter().flat_map(|path| {
         path_range::generate_paths(path.to_str().unwrap(),("[","]"))
-    }).collect::<Vec<String>>();
+    }).map(|path| path_parent::replace_with_parent_dir(path)).collect::<Vec<String>>();
 
     let generated_files =  model.get_files().into_iter().flat_map(|path| {
         path_range::generate_paths(path.to_str().unwrap(),("[","]"))
-    }).collect::<Vec<String>>();
+    }).map(|path| path_parent::replace_with_parent_dir(path)).collect::<Vec<String>>();
 
     for dir in generated_paths {
         println!("{}", dir);

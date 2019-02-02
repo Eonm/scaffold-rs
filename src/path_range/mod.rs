@@ -27,14 +27,10 @@ fn split_str_at_delimiters <'a> (input_str: &'a str, delimiters: &(&'a str,&'a s
                             return_string.append(&mut split_str_at_delimiters(b, delimiters));
                             return_string.append(&mut split_str_at_delimiters(e, delimiters));
                         } else {
-                            let first_delimiter = delimiters.0.chars().next().unwrap();
-                            let second_delimiter = delimiters.1.chars().next().unwrap();
-                            let range : Vec<&str> = beg.split(&[first_delimiter, second_delimiter][..]).collect();
-                            return_string.push(PathElement::Enumerator(range[1].to_string()));
+                            return_string.push(match_syntax_elem(beg, delimiters))
                         }
                     },
-                    None => {
-                    }
+                    None => ()
                 }
                 return_string.append(&mut split_str_at_delimiters(ed, delimiters));
             }
@@ -46,14 +42,14 @@ fn split_str_at_delimiters <'a> (input_str: &'a str, delimiters: &(&'a str,&'a s
 
 fn str_to_range(r: &String) -> std::ops::Range<i32> {
     let rr : Vec<i32> = r.split("-")
-        .map(|elem| elem.parse::<i32>().expect("This is not a number"))
+        .map(|elem| elem.parse::<i32>().expect("Invalid digit in range"))
         .collect();
 
-        if rr[0] < rr[1] {
-            return rr[0]..rr[1]+1
-        } else {
-            return rr[1]..rr[0]+1
-        }
+    if rr[0] < rr[1] {
+        return rr[0]..rr[1]+1
+    } else {
+        return rr[1]..rr[0]+1
+    }
 }
 
 fn assemble_pairs(input_vec : Vec<PathElement>) -> Vec<String> {
@@ -95,6 +91,22 @@ pub fn generate_paths(input_str : &str, delimiters : (&str,&str)) -> Vec<String>
     let splited_string = split_str_at_delimiters(input_str, &delimiters);
     let paths = assemble_pairs(splited_string);
     paths
+}
+
+fn match_syntax_elem (syntax_elem: &str, delimiters: &(&str,&str)) -> PathElement {
+    match syntax_elem {
+        "[*]" => PathElement::Path(syntax_elem.to_string()),
+        _ => {
+            if syntax_elem.contains("-") {
+                let first_delimiter = delimiters.0.chars().next().unwrap();
+                let second_delimiter = delimiters.1.chars().next().unwrap();
+                let range : Vec<&str> = syntax_elem.split(&[first_delimiter, second_delimiter][..]).collect();
+                return PathElement::Enumerator(range[1].to_string())
+            } else {
+                return PathElement::Path(syntax_elem.to_string())
+            }
+        }
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -159,5 +171,15 @@ mod tests {
     #[should_panic]
     fn str_to_range_should_failed () {
         str_to_range(&"[1-5]".to_string());
+    }
+
+    #[test]
+    fn test_match_syntax_elem () {
+        let delimiters = ("[", "]");
+        let syntax_elem = "[*]";
+        assert_eq!(match_syntax_elem(syntax_elem, &delimiters), PathElement::Path("[*]".to_string()));
+
+        let syntax_elem1 = "[1-58]";
+        assert_eq!(match_syntax_elem(syntax_elem1, &delimiters), PathElement::Enumerator("1-58".to_string()));
     }
 }
