@@ -1,7 +1,7 @@
 {
 	"name": "fake model",
 	"paths": [
-		"./path_[1-20]/[*]file_[2-10].txt",
+		"./path_[1-2]/[*]file_[2-10].txt",
 		"file_[2-10][*].txt"
 	],
 	"licence": "MIT",

@@ -28,16 +28,37 @@ fn main() {
             unsafe {
                 VERBOSITY = matches.is_present("verbosity");
             }
-            let template_path = matches.value_of("template").unwrap();
-            let config = open_config(&Path::new(template_path));
-            let parsed_config = load_config(config);
+
+            let parsed_config = match matches.value_of("template") {
+                Some(template) => {
+                    let template_path = template;
+                    let config = open_config(&Path::new(template_path));
+                    let model = load_config(config);
+                    model
+                },
+                None => {
+                    let input_paths = matches.values_of("input").unwrap()
+                    .map(|p| p.to_string())
+                    .collect::<Vec<String>>();
+                    let model = Model {
+                        name    :   None,
+                        notes   :   None,
+                        author  :   None,
+                        email   :   None,
+                        licence :   None,
+                        paths   :   input_paths
+                    };
+                    model
+                }
+            };
+
             if matches.is_present("display") {
                   println!("Printing template info");
                   println!("{}", parsed_config.display());
             } else if matches.is_present("dry_run") {
                 dry_run(parsed_config)
             } else {
-              scaffold(parsed_config);
+              scaffold(&parsed_config);
             }
         }
         _ => {}
@@ -85,11 +106,11 @@ fn have_ancestors (path : &Path) -> bool {
 
 #[derive(Serialize, Deserialize)]
 struct Model {
-    name    :   String,
-    notes   :   String,
-    author  :   String,
-    email   :   String,
-    licence :   String,
+    name    :   Option<String>,
+    notes   :   Option<String>,
+    author  :   Option<String>,
+    email   :   Option<String>,
+    licence :   Option<String>,
     paths   :   Vec<String>
 }
 
@@ -118,13 +139,13 @@ impl Model {
         files_paths
     }
 
-    pub fn display (&self) -> String {
+    pub fn display (self) -> String {
         format!("name\t:\t{}\nnotes\t:\t{}\nauthor\t:\t{}\nemail\t:\t{}\nlicence\t:\t{}\npaths\t:\t{:?}",
-            &self.name,
-            &self.notes,
-            &self.author,
-            &self.email,
-            &self.licence,
+            &self.name.unwrap_or("undefined".to_string()),
+            &self.notes.unwrap_or("undefined".to_string()),
+            &self.author.unwrap_or("undefined".to_string()),
+            &self.email.unwrap_or("undefined".to_string()),
+            &self.licence.unwrap_or("undefined".to_string()),
             &self.paths
         )
     }
@@ -163,8 +184,8 @@ fn load_config (config : String) -> Model {
 // Scaffolding
 //-------------------------------------------------------------------------------------------------
 
-fn scaffold (model : Model) {
-    log(&format!("Scaffolding with model {} created by {}", model.name, model.author), LogType::Info);
+fn scaffold (model : &Model) {
+    log(&format!("Scaffolding with model {} created by {}", model.name.clone().unwrap_or("undefined".to_string()), model.author.clone().unwrap_or("undefined".to_string())), LogType::Info);
 
     //always crate dirs before files
     let generated_paths =  model.get_dirs().into_iter().flat_map(|path| {
@@ -286,11 +307,11 @@ mod tests {
     #[test]
     fn test_get_dirs() {
         let fake_model = Model {
-            name    :   "fake_model".to_string(),
-            notes   :   "".to_string(),
-            author  :   "john doe".to_string(),
-            email   :   "john.doe@mail.com".to_string(),
-            licence :   "MIT".to_string(),
+            name    :   Some("fake_model".to_string()),
+            notes   :   Some("".to_string()),
+            author  :   Some("john doe".to_string()),
+            email   :   Some("john.doe@mail.com".to_string()),
+            licence :   Some("MIT".to_string()),
             paths   :   vec!["dir1/".to_string(), "/dir/file.txt".to_string(), "/dir1/dir2/".to_string(), "file.txt".to_string()],
         };
 
@@ -301,11 +322,11 @@ mod tests {
     #[test]
     fn test_get_files() {
         let fake_model = Model {
-            name    :   "fake_model".to_string(),
-            notes   :   "".to_string(),
-            author  :   "john doe".to_string(),
-            email   :   "john.doe@mail.com".to_string(),
-            licence :   "MIT".to_string(),
+            name    :   Some("fake_model".to_string()),
+            notes   :   Some("".to_string()),
+            author  :   Some("john doe".to_string()),
+            email   :   Some("john.doe@mail.com".to_string()),
+            licence :   Some("MIT".to_string()),
             paths   :   vec!["dir1/".to_string(), "/dir/file.txt".to_string(), "/dir1/dir2/".to_string(), "file.txt".to_string()],
         };
 

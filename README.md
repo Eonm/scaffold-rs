@@ -16,6 +16,10 @@ __Basic usage :__
   scaffold-rs scaffold -t template_file.json
 ```
 
+```sh
+  scaffold-rs scaffold -i "input_string"
+```
+
 __Dry run :__
 
 Only display paths. Generated files and directories won't be created.
@@ -71,6 +75,11 @@ Ranges are written as follow : __[startingNumber-endingNumber]__
 ```sh
 ./dir/files_[1-6].txt
 # will produce :
+
+## dir are created first
+# ./dir/
+
+## files are created next
 # ./dir/files_1.txt
 # ./dir/files_2.txt
 # ./dir/files_3.txt
@@ -83,12 +92,18 @@ Multiple ranges can be defined for one path
 ```sh
 ./dir_[1-2]/files_[1-3].txt
 # will produce :
-# ./files_1/files_1.txt
-# ./files_1/files_2.txt
-# ./files_1/files_3.txt
-# ./files_2/files_1.txt
-# ./files_2/files_2.txt
-# ./files_2/files_3.txt
+
+## dir are created first
+#  ./dir_1
+#  ./dir_2
+
+## files are created next
+# ./dir_1/files_1.txt
+# ./dir_1/files_2.txt
+# ./dir_1/files_3.txt
+# ./dir_2/files_1.txt
+# ./dir_2/files_2.txt
+# ./dir_2/files_3.txt
 ```
 
 __Parent Directory :__
@@ -98,6 +113,11 @@ References to a parent directory are written as follow : __[*]__
 ```sh
 ./chapter_1/[*]_section_[1-6].txt
 # will produce :
+
+## dir are created first
+# ./chapter_1
+
+## files are created next
 # ./chapter_1/chapter_1_section_1.txt
 # ./chapter_1/chapter_1_section_2.txt
 # ./chapter_1/chapter_1_section_3.txt
@@ -111,6 +131,12 @@ Multiple references to a parent directory can be defined
 ```sh
 ./chapter_[1-2]/[*]_sections/[*]_[1-3].txt
 # will produce :
+
+## dir are created first
+# ./chapter_1/chapter_1_sections/
+# ./chapter_2/chapter_2_sections/
+
+## files are created next
 # ./chapter_1/chapter_1_sections/chapter_1_sections_1.txt
 # ./chapter_1/chapter_1_sections/chapter_1_sections_2.txt
 # ./chapter_1/chapter_1_sections/chapter_1_sections_3.txt
