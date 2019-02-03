@@ -372,21 +372,4 @@ mod tests {
         "#;
         load_config(input_json.to_string());
     }
-
-    #[test]
-    #[should_panic]
-    fn test_should_panic_missing_config_element() {
-        let input_json = r#"
-        {
-            "name": "fake_model",
-            "paths": [
-                "./path_1/file_1",
-                "./path_1/file_2",
-                "./path_1/dir_1/",
-                "./path_1/dir_2/"
-            ]
-        }
-        "#;
-        load_config(input_json.to_string());
-    }
 }
