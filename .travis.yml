@@ -17,4 +17,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: Eonm/scaffold-rs
+    branches:
+    only:
+      - master
 tags: true
