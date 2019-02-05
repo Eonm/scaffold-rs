@@ -1,6 +1,6 @@
 # scaffold-rs
 
-![GitHub language count](https://img.shields.io/badge/language-rust-blue.svg) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Build Status](https://travis-ci.org/Eonm/scaffold-rs.svg?branch=master)](https://travis-ci.org/Eonm/csl-to-markdown)
+![GitHub language count](https://img.shields.io/badge/language-rust-blue.svg) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Build Status](https://travis-ci.org/Eonm/scaffold-rs.svg?branch=master)](https://travis-ci.org/Eonm/scaffold-rs)
 
 
 Create files and directories recursively
