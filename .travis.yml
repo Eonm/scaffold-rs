@@ -5,7 +5,7 @@ os:
 sudo: false
 cache: cargo
 script:
-- make release
+- cargo build --release
 - cargo test --verbose --all
 deploy:
   provider: releases
