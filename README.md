@@ -63,7 +63,7 @@ A typical template contains the following elements:
 * an email
 * some notes
 
-__Only the name and paths are compulsory fields__
+__Name and paths fields are mendatory__
 
 ### Path syntax
 
